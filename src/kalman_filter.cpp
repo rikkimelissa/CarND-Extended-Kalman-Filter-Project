@@ -1,6 +1,6 @@
 #include "kalman_filter.h"
 #include <iostream>
-
+#include <math.h>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -56,26 +56,25 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   double py = x_(1);
   double vx = x_(2);
   double vy = x_(3);
-  h << sqrt(px*px + py*py), atan(py/px), (px*vx + py*vy)/sqrt(px*px+py*py);
+  h << sqrt(px*px + py*py), atan2(py,px), (px*vx + py*vy)/sqrt(px*px+py*py);
   
-  while (h(1) > pi){
-    h(1) = h(1) - 2*pi;
+  VectorXd y = z - h;
+
+  while (y(1) > pi){
+    y(1) = y(1) - 2*pi;
+    cout << y(1) << endl;
   }
-  while (h(1) < -1*pi){
-    h(1) = h(1) + 2*pi;
+  while (y(1) < -pi){
+    y(1) = y(1) + 2*pi;
+    cout << y(1) << endl;
   }
 
-  VectorXd y = z - h;
   MatrixXd Ht = Hj.transpose();
-  cout << Hj << endl;
-  cout << P_ << endl;
-  cout << Ht << endl;  
-  cout << R_ << endl;
-  MatrixXd S = Hj * P_ * Ht; // + R_;
-  // MatrixXd Si = S.inverse();
-  // MatrixXd K =  P_ * Ht * Si;  
-  // x_ = x_ + (K * y);
-  // long x_size = x_.size();
-  // MatrixXd I = MatrixXd::Identity(x_size, x_size);
-  // P_ = (I - K * Hj) * P_;
+  MatrixXd S = Hj * P_ * Ht + R_;
+  MatrixXd Si = S.inverse();
+  MatrixXd K =  P_ * Ht * Si;  
+  x_ = x_ + (K * y);
+  long x_size = x_.size();
+  MatrixXd I = MatrixXd::Identity(x_size, x_size);
+  P_ = (I - K * Hj) * P_;
 }
