@@ -1,6 +1,10 @@
 # Extended Kalman Filter Project
 Self-Driving Car Engineer Nanodegree Program
 
+
+[image1]: ./images/full_image.PNG "Full image"
+[image2]: ./images/zoom_image.PNG "Zoomed image"
+
 In this project I utilized an extended kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Passing the project required obtaining RMSE values that are lower than the tolerance outlined in the project rubric. 
 
 This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
@@ -14,6 +18,13 @@ Required steps for implementing this extended Kalman filter included:
 - Calling the update step for lidar or radar measurements
 - Linearizing update equations for radar measurements by calculating a Jacobian matrix
 
+Here is an example image of the working extended Kalman filter, where lidar measurements are red circles, radar measurements are blue circles with an arrow pointing in the direction of the observed angle, and estimation markers are green triangles.
+
+![alt text][image2]
+
+This image shows the full path driven by the car in this simulation.
+
+![alt text][image1]
 
 
 
